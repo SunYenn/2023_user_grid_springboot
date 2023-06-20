@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addExposedHeader("accesstoken");
         configuration.addExposedHeader("content-disposition");
         configuration.setMaxAge((long) 3600);
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 URL 패턴의 cors 구성 객체 등록
