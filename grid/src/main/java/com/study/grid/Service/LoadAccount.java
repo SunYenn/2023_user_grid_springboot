@@ -1,9 +1,9 @@
 package com.study.grid.Service;
 
-import com.study.grid.DAO.UserMstMapper;
+import com.study.grid.DAO.authMapper;
 import com.study.grid.Security.CustomUserDetails;
-import com.study.grid.VO.CommRoleGrp;
-import com.study.grid.VO.UserMst;
+import com.study.grid.VO.EttRoleGrp;
+import com.study.grid.VO.EttUserMst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoadAccount implements UserDetailsService {
 
-    private final UserMstMapper userMapper;
+    private final authMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
 
-        UserMst user = null;
-        CommRoleGrp role = null;
+        EttUserMst user = null;
+        EttRoleGrp role = null;
 
         if (user == null) return null;
 

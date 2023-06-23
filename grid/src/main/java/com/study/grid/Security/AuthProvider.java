@@ -21,7 +21,7 @@ public class AuthProvider {
     private static final String BEARER_TYPE = "bearer ";
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCESS_USER_ID = "id";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60;
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60; // 한시간
 
     @Value("${spring.jwt.secret.signature}")
     private String signatureKey;
@@ -49,7 +49,6 @@ public class AuthProvider {
 
     // request객체 헤더에 담겨 있는 토큰 가져오기
     public String resolveToken(HttpServletRequest request) {
-
         if (request.getHeader("accesstoken") == null) return null;
         return request.getHeader("accesstoken").replace(BEARER_TYPE, "");
     }

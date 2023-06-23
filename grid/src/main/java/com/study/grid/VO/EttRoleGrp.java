@@ -1,9 +1,11 @@
 package com.study.grid.VO;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
-public class CommRoleGrp extends CommData {
+@ToString(callSuper = true)
+public class EttRoleGrp extends CommData {
 
     private int role_grp_seq; // 권한 그룹 관리 시퀀스(PK)
     private String role_grp_name; // 권한 그룹 이름

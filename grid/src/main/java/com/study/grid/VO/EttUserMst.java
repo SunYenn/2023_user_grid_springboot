@@ -1,9 +1,11 @@
 package com.study.grid.VO;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
-public class UserMst {
+@ToString(callSuper = true)
+public class EttUserMst extends CommData {
 
     private int user_seq; // 유저 관리 시퀀스(PK)
     private String user_id; // 로그인 id

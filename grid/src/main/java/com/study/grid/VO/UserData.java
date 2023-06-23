@@ -5,9 +5,20 @@ import lombok.Data;
 @Data
 public class UserData {
 
-    private UserMst userMst;
-    private UserPwd userPwd;
-    private CommRoleGrp commRoleGrp;
-    private UserRoleGrpMap userRoleGrpMap;
-    private CommData commData;
+    private EttUserMst ettUserMst;
+    private EttUserPwd ettUserPwd;
+    private EttRoleGrp ettRoleGrp;
+    private EttUserRoleGrpMap ettUserRoleGrpMap;
+
+    private OrderFg orderFg;
+
+    private Paging paging;
+
+    public UserData() {}
+
+    public UserData(EttUserMst mst, EttUserPwd pwd, EttRoleGrp roleGrp) {
+        this.ettUserMst = mst;
+        this.ettUserPwd = pwd;
+        this.ettRoleGrp = roleGrp;
+    }
 }

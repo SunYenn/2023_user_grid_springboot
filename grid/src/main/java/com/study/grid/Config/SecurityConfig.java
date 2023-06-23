@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          * cors : 웹 어플리케이션의 도메인이 다른 도메인의 리소스 대해 접근이 허용되는지 체크하는 것.
          * 이때, cross-origin HTTP request 요청 실행.
          */
-        configuration.addAllowedOrigin("http://localhost:3000"); //교차 출처 요청에 대한 허용 도메인 설정
+        configuration.addAllowedOrigin("http://192.168.1.139:3000"); //교차 출처 요청에 대한 허용 도메인 설정
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("accesstoken");
@@ -76,8 +76,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() //요청에 대한 접근 제한을 설정하는 메서드
                 // Preflight Request라는 실제 요청 전에 보내지는 CORS 요청에 대해 모두 접근 허용
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/api/user/*").permitAll() // 회원가입, 로그인, 중복계정 체크는 토큰 없어도 허용
-                .anyRequest().hasRole("USER")			  // 이외 나머지는 USER 권한필요
+                .antMatchers("/api/auth/*").permitAll() // 사용자 인증 과정 부분 권한 필요 X
+                .antMatchers("/api/user/*").hasRole("사용자관리자") // 사용자 관리 요청에는 '사용자관리자' 권한 필요
+                .antMatchers("/api/role/*").hasRole("권한관리자") // 관한 관리 요청에는 '권한 관리자' 권한 필요
                 .and()
                 .cors(); // CORS(Cross-Origin Resource Sharing)를 활성화
     }
