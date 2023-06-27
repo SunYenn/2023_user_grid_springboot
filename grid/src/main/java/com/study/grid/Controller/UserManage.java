@@ -7,6 +7,7 @@ import com.study.grid.Service.PWencryption;
 import com.study.grid.Service.SetData;
 import com.study.grid.VO.EttRoleGrp;
 import com.study.grid.VO.EttUserMst;
+import com.study.grid.VO.Paging;
 import com.study.grid.VO.UserData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,19 +29,22 @@ import java.util.Date;
 public class UserManage {
 
     @Autowired
-    private UserManageMapper mapper;
+    private UserManageMapper UMmapper;
 
     @Autowired
     private AuthMapper authMapper;
 
     @PostMapping("/list") // 사용자 목록
-    public void list(@RequestBody UserData data){
-
+    public ResponseEntity<?> list(@RequestBody Paging paging){
+        paging.setTotal_count(UMmapper.countUserMstList(paging));
+        SetData.setPaging(paging);
+        paging.setUserMsts(UMmapper.selectUserMstList(paging));
+        return ResponseEntity.ok(paging);
     }
 
     @GetMapping("/roleList") // 사용자 목록
     public ArrayList<EttRoleGrp> roleList(){
-        ArrayList<EttRoleGrp> roleList = mapper.getRoleGrpList();
+        ArrayList<EttRoleGrp> roleList = UMmapper.getRoleGrpList();
         return roleList;
     }
 
@@ -56,19 +60,20 @@ public class UserManage {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = simpleDateFormat.format(date);
-        int user_seq = mapper.getUserSeq();
+        int user_seq = UMmapper.getUserSeq();
 
         SetData.setCreData(data, AuthUtil.getId(), strDate);
         SetData.setUserSeq(data, user_seq);
         data.getEttUserPwd().setUser_pwd(PWencryption.encrypt(data.getEttUserPwd().getUser_pwd()));
 
         try{
-            mapper.istUserMst(data.getEttUserMst());
-            mapper.istUserPwd(data.getEttUserPwd());
-            mapper.istUserRoleGrpMap(data.getEttUserRoleGrpMap());
+            UMmapper.istUserMst(data.getEttUserMst());
+            UMmapper.istUserPwd(data.getEttUserPwd());
+            UMmapper.istUserRoleGrpMap(data.getEttUserRoleGrpMap());
 
             return ResponseEntity.ok("사용자 등록에 성공했습니다.");
         } catch (RuntimeException e) {
+            log.info("register 클래스 트랜잭션 발생");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 트랜잭션 발생시 롤백
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 등록에 실패했습니다.");
         }

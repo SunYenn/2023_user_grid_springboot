@@ -1,22 +1,22 @@
 package com.study.grid.DAO;
 
-import com.study.grid.VO.EttRoleGrp;
-import com.study.grid.VO.EttUserMst;
-import com.study.grid.VO.EttUserPwd;
-import com.study.grid.VO.EttUserRoleGrpMap;
+import com.study.grid.VO.*;
 
 import java.util.ArrayList;
 
 @org.apache.ibatis.annotations.Mapper
 public interface UserManageMapper {
 
-    int IdCheck(String userId);
+    int countUserMstList(Paging paging);
+    ArrayList<EttUserMst> selectUserMstList(Paging paging);
 
     ArrayList<EttRoleGrp> getRoleGrpList();
-    int getUserSeq();
 
+    int getUserSeq();
     // 사용자 등록
     void istUserMst(EttUserMst ettUserMst);
+
     void istUserPwd(EttUserPwd ettUserPwd);
+
     void istUserRoleGrpMap(EttUserRoleGrpMap ettUserRoleGrpMap);
 }

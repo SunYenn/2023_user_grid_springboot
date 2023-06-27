@@ -52,5 +52,67 @@
         )
     </insert>
 
+    <select id="countUserMstList" parameterType="com.study.grid.VO.Paging" resultType="int">
+        select count(*) from tb_user_mst where 1 = 1
+        <if test='search_id.length() > 0'>
+            and user_id like concat('%',#{search_id},'%')
+        </if>
+        <if test='search_name.length() > 0'>
+            and user_name like concat('%',#{search_name},'%')
+        </if>
+        <if test='search_telno.length() > 0'>
+            and user_telno like concat('%',#{search_telno},'%')
+        </if>
+    </select>
+
+    <select id="selectUserMstList" parameterType="com.study.grid.VO.Paging" resultType="com.study.grid.VO.EttUserMst">
+        select * from tb_user_mst where 1 = 1
+        <if test='search_id.length() > 0'>
+            and user_id like concat('%',#{search_id},'%')
+        </if>
+        <if test='search_name.length() > 0'>
+            and user_name like concat('%',#{search_name},'%')
+        </if>
+        <if test='search_telno.length() > 0'>
+            and user_telno like concat('%',#{search_telno},'%')
+        </if>
+        order by 1 = 1
+        <if test="user_name_fg.length() > 0">
+            , user_name
+            <choose>
+                <when test="user_name_fg == 'desc'">
+                    DESC
+                </when>
+                <otherwise>
+                    ASC
+                </otherwise>
+            </choose>
+        </if>
+        <if test="cre_dt_fg.length() > 0">
+            , cre_dt
+            <choose>
+                <when test="cre_dt_fg == 'desc'">
+                    DESC
+                </when>
+                <otherwise>
+                    ASC
+                </otherwise>
+            </choose>
+        </if>
+        <if test="udt_dt_fg.length() > 0">
+            , udt_dt
+            <choose>
+                <when test="udt_dt_fg == 'desc'">
+                    DESC
+                </when>
+                <otherwise>
+                    ASC
+                </otherwise>
+            </choose>
+        </if>
+        LIMIT #{start_no},#{page_size}
+    </select>
+
+
 
 </mapper>

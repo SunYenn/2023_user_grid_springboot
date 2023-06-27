@@ -10,8 +10,6 @@ public class UserData {
     private EttRoleGrp ettRoleGrp;
     private EttUserRoleGrpMap ettUserRoleGrpMap;
 
-    private OrderFg orderFg;
-
     private Paging paging;
 
     public UserData() {}
