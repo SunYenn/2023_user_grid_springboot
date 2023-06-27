@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -43,6 +45,7 @@ public class UserManage {
     }
 
     @PostMapping("/register") // 사용자 등록
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<?> register(@RequestBody UserData data) throws NoSuchAlgorithmException {
 
         EttUserMst mst = authMapper.IdCheck(data.getEttUserMst().getUser_id());
@@ -59,11 +62,17 @@ public class UserManage {
         SetData.setUserSeq(data, user_seq);
         data.getEttUserPwd().setUser_pwd(PWencryption.encrypt(data.getEttUserPwd().getUser_pwd()));
 
-        mapper.istUserMst(data.getEttUserMst());
-        mapper.istUserPwd(data.getEttUserPwd());
-        mapper.istUserRoleGrpMap(data.getEttUserRoleGrpMap());
+        try{
+            mapper.istUserMst(data.getEttUserMst());
+            mapper.istUserPwd(data.getEttUserPwd());
+            mapper.istUserRoleGrpMap(data.getEttUserRoleGrpMap());
 
-        return ResponseEntity.ok("사용자 등록에 성공했습니다.");
+            return ResponseEntity.ok("사용자 등록에 성공했습니다.");
+        } catch (RuntimeException e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 트랜잭션 발생시 롤백
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 등록에 실패했습니다.");
+        }
+
     }
 
 }
