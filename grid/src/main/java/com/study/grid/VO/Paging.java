@@ -23,20 +23,5 @@ public class Paging {
     private String search_telno;
 
     private ArrayList<EttUserMst> userMsts = new ArrayList<EttUserMst>();
-
-    public Paging() {}
-
-    public Paging(int page_size, int total_count, int current_page) {
-        this.page_size = page_size;
-        this.total_count = total_count;
-        this.current_page = current_page;
-        calculator();
-    }
-
-    private void calculator() {
-        total_page = (total_count - 1) / page_size + 1;
-        current_page = current_page > total_page ? total_page : current_page;
-        start_no = (current_page - 1) * page_size;
-        start_page = (current_page - 1) / page_size * page_size + 1;
-    }
+    
 }
