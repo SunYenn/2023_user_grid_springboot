@@ -1,7 +1,7 @@
 package com.study.grid.Controller;
 
 
-import com.study.grid.DAO.authMapper;
+import com.study.grid.DAO.AuthMapper;
 import com.study.grid.Security.AuthProvider;
 import com.study.grid.Service.ConvertToIPv4;
 import com.study.grid.Service.LoginService;
@@ -27,7 +27,7 @@ public class auth {
     private final AuthProvider authProvider;
 
     @Autowired
-    private authMapper mapper;
+    private AuthMapper mapper;
 
 
     @PostMapping("/login") // 로그인

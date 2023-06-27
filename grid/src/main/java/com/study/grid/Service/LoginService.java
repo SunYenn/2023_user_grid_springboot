@@ -1,6 +1,6 @@
 package com.study.grid.Service;
 
-import com.study.grid.DAO.authMapper;
+import com.study.grid.DAO.AuthMapper;
 import com.study.grid.Exception.ForbiddenException;
 import com.study.grid.Exception.UserNotFoundException;
 import com.study.grid.VO.*;
@@ -20,7 +20,7 @@ import java.util.Date;
 public class LoginService {
 
     @Autowired
-    private authMapper mapper;
+    private AuthMapper mapper;
 
     @Autowired
     private ModelMapper modelMapper;

@@ -5,7 +5,7 @@ import com.study.grid.VO.EttUserMst;
 import com.study.grid.VO.EttUserPwd;
 
 @org.apache.ibatis.annotations.Mapper
-public interface authMapper {
+public interface AuthMapper {
 
     // login시 사용
     EttUserMst IdCheck(String userId);

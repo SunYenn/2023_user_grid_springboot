@@ -1,6 +1,6 @@
 package com.study.grid.Service;
 
-import com.study.grid.DAO.authMapper;
+import com.study.grid.DAO.AuthMapper;
 import com.study.grid.Security.CustomUserDetails;
 import com.study.grid.VO.EttRoleGrp;
 import com.study.grid.VO.EttUserMst;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoadAccount implements UserDetailsService {
 
-    private final authMapper userMapper;
+    private final AuthMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {

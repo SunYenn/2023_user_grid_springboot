@@ -10,6 +10,47 @@
         select IFNULL(Max(USER_SEQ) + 1,1) from tb_user_mst
     </select>
 
+    <insert id="istUserMst" parameterType="com.study.grid.VO.EttUserMst">
+        insert into tb_user_mst (
+            cre_id,
+            cre_dt,
+            user_seq,
+            user_id,
+            user_name,
+            user_telno,
+            card_id,
+            card_exp_dt,
+            acct_exp_dt
+        ) values (
+            #{cre_id},
+            #{cre_dt},
+            #{user_seq},
+            #{user_id},
+            #{user_name},
+            #{user_telno},
+            #{card_id},
+            #{card_exp_dt},
+            #{acct_exp_dt}
+        )
+    </insert>
+
+    <insert id="istUserPwd" parameterType="com.study.grid.VO.EttUserPwd">
+        <selectKey keyProperty="user_pwd_seq" resultType="int" order="BEFORE">
+            SELECT IFNULL(Max(user_pwd_seq) + 1,1) from tb_user_pwd
+        </selectKey>
+        insert into tb_user_pwd values (
+            #{user_pwd_seq},
+            #{user_seq},
+            #{user_pwd}
+        )
+    </insert>
+
+    <insert id="istUserRoleGrpMap" parameterType="com.study.grid.VO.EttUserRoleGrpMap">
+        insert into tb_user_role_grp_map values (
+            #{user_seq},
+            #{role_grp_seq}
+        )
+    </insert>
 
 
 </mapper>
