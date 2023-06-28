@@ -1,10 +1,12 @@
 package com.study.grid.VO;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 
 @Data
+
 public class Paging {
 
     private int page_size = 10;

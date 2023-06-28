@@ -35,15 +35,15 @@ public class UserManage {
     private AuthMapper authMapper;
 
     @PostMapping("/list") // 사용자 목록
-    public ResponseEntity<?> list(@RequestBody Paging paging){
+    public ResponseEntity<?> list(@RequestBody Paging paging) {
         paging.setTotal_count(UMmapper.countUserMstList(paging));
         SetData.setPaging(paging);
         paging.setUserMsts(UMmapper.selectUserMstList(paging));
         return ResponseEntity.ok(paging);
     }
 
-    @GetMapping("/roleList") // 사용자 목록
-    public ArrayList<EttRoleGrp> roleList(){
+    @GetMapping("/roleList") // 역할 목록
+    public ArrayList<EttRoleGrp> roleList() {
         ArrayList<EttRoleGrp> roleList = UMmapper.getRoleGrpList();
         return roleList;
     }
@@ -53,7 +53,7 @@ public class UserManage {
     public ResponseEntity<?> register(@RequestBody UserData data) throws NoSuchAlgorithmException {
 
         EttUserMst mst = authMapper.IdCheck(data.getEttUserMst().getUser_id());
-        if(mst != null) {
+        if (mst != null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("중복된 아이디입니다.");
         }
 
@@ -66,18 +66,51 @@ public class UserManage {
         SetData.setUserSeq(data, user_seq);
         data.getEttUserPwd().setUser_pwd(PWencryption.encrypt(data.getEttUserPwd().getUser_pwd()));
 
-        try{
+        try {
             UMmapper.istUserMst(data.getEttUserMst());
             UMmapper.istUserPwd(data.getEttUserPwd());
             UMmapper.istUserRoleGrpMap(data.getEttUserRoleGrpMap());
 
             return ResponseEntity.ok("사용자 등록에 성공했습니다.");
         } catch (RuntimeException e) {
-            log.info("register 클래스 트랜잭션 발생");
+            log.info("register 메소드 트랜잭션 발생");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 트랜잭션 발생시 롤백
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 등록에 실패했습니다.");
         }
+    }
 
+    @PostMapping("/alter") // 사용자 정보 수정
+    @Transactional(rollbackFor = RuntimeException.class)
+    public ResponseEntity<?> alter(@RequestBody UserData data) throws NoSuchAlgorithmException {
+
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = simpleDateFormat.format(date);
+
+        SetData.setUdtData(data, AuthUtil.getId(), strDate);
+        data.getEttUserRoleGrpMap().setUser_seq(data.getEttUserMst().getUser_seq());
+
+        try {
+            log.info("getEttUserMst : {}", data.getEttUserMst());
+            log.info("getEttUserRoleGrpMap : {}",data.getEttUserRoleGrpMap());
+            UMmapper.udtUserMst(data.getEttUserMst());
+            UMmapper.udtUserRoleGrpMap(data.getEttUserRoleGrpMap());
+
+            return ResponseEntity.ok("사용자 정보 수정에 성공했습니다.");
+        } catch (RuntimeException e) {
+            log.info("alter 메소드 트랜잭션 발생");
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); // 트랜잭션 발생시 롤백
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("사용자 정보 수정에 실패했습니다.");
+        }
+    }
+
+    @GetMapping("/getUserData/{id}")
+    @Transactional(rollbackFor = RuntimeException.class)
+    public ResponseEntity<?> getUserData(@PathVariable String id) throws NoSuchAlgorithmException {
+
+        log.info("id : {}", id);
+        EttUserMst userMst = UMmapper.getUserData(id);
+        return ResponseEntity.ok(userMst);
     }
 
 }

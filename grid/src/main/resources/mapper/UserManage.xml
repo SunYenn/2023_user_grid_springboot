@@ -2,6 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.study.grid.DAO.UserManageMapper" >
 
+    <select id="countUserMstList" parameterType="com.study.grid.VO.Paging" resultType="int">
+        select count(*) from tb_user_mst where 1 = 1
+        <if test='search_id.length() > 0'>
+            and user_id like concat('%',#{search_id},'%')
+        </if>
+        <if test='search_name.length() > 0'>
+            and user_name like concat('%',#{search_name},'%')
+        </if>
+        <if test='search_telno.length() > 0'>
+            and user_telno like concat('%',#{search_telno},'%')
+        </if>
+    </select>
+
+    <select id="selectUserMstList" parameterType="com.study.grid.VO.Paging" resultType="com.study.grid.VO.EttUserMst">
+        select mst.*,
+        role.ROLE_GRP_NAME
+        from tb_user_mst mst
+        join tb_user_role_grp_map map on mst.USER_SEQ = map.USER_SEQ
+        join tb_role_grp role on map.ROLE_GRP_SEQ = role.ROLE_GRP_SEQ
+        where 1 = 1
+        <if test='search_id.length() > 0'>
+            and user_id like concat('%',#{search_id},'%')
+        </if>
+        <if test='search_name.length() > 0'>
+            and user_name like concat('%',#{search_name},'%')
+        </if>
+        <if test='search_telno.length() > 0'>
+            and user_telno like concat('%',#{search_telno},'%')
+        </if>
+        order by 1 = 1
+        <choose>
+            <when test="user_name_fg.length() > 0">
+                , user_name
+                <choose>
+                    <when test="user_name_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <when test="cre_dt_fg.length() > 0">
+                , cre_dt
+                <choose>
+                    <when test="cre_dt_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <when test="udt_dt_fg.length() > 0">
+                , udt_dt
+                <choose>
+                    <when test="udt_dt_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <otherwise>, user_seq ASC</otherwise>
+        </choose>
+        LIMIT #{start_no},#{page_size}
+    </select>
+
     <select id="getRoleGrpList" resultType="com.study.grid.VO.EttRoleGrp">
         select ROLE_GRP_SEQ, ROLE_GRP_NAME from tb_role_grp
     </select>
@@ -52,67 +109,28 @@
         )
     </insert>
 
-    <select id="countUserMstList" parameterType="com.study.grid.VO.Paging" resultType="int">
-        select count(*) from tb_user_mst where 1 = 1
-        <if test='search_id.length() > 0'>
-            and user_id like concat('%',#{search_id},'%')
-        </if>
-        <if test='search_name.length() > 0'>
-            and user_name like concat('%',#{search_name},'%')
-        </if>
-        <if test='search_telno.length() > 0'>
-            and user_telno like concat('%',#{search_telno},'%')
-        </if>
+    <update id="udtUserMst" parameterType="com.study.grid.VO.EttUserMst">
+        update tb_user_mst set
+            udt_id = #{udt_id},
+            udt_dt = #{udt_dt},
+            user_name = #{user_name},
+            user_sno = #{user_sno},
+            user_email = #{user_email},
+            user_telno = #{user_telno},
+            acct_exp_dt = #{acct_exp_dt},
+            card_id = #{card_id},
+            card_exp_dt = #{card_exp_dt}
+        where user_seq = #{user_seq}
+    </update>
+
+    <update id="udtUserRoleGrpMap" parameterType="com.study.grid.VO.EttUserRoleGrpMap">
+        update tb_user_role_grp_map set
+           role_grp_seq = #{role_grp_seq}
+        where user_seq = #{user_seq}
+    </update>
+
+    <select id="getUserData" parameterType="String" resultType="com.study.grid.VO.EttUserMst">
+        select * from tb_user_mst where user_id = #{id}
     </select>
-
-    <select id="selectUserMstList" parameterType="com.study.grid.VO.Paging" resultType="com.study.grid.VO.EttUserMst">
-        select * from tb_user_mst where 1 = 1
-        <if test='search_id.length() > 0'>
-            and user_id like concat('%',#{search_id},'%')
-        </if>
-        <if test='search_name.length() > 0'>
-            and user_name like concat('%',#{search_name},'%')
-        </if>
-        <if test='search_telno.length() > 0'>
-            and user_telno like concat('%',#{search_telno},'%')
-        </if>
-        order by 1 = 1
-        <if test="user_name_fg.length() > 0">
-            , user_name
-            <choose>
-                <when test="user_name_fg == 'desc'">
-                    DESC
-                </when>
-                <otherwise>
-                    ASC
-                </otherwise>
-            </choose>
-        </if>
-        <if test="cre_dt_fg.length() > 0">
-            , cre_dt
-            <choose>
-                <when test="cre_dt_fg == 'desc'">
-                    DESC
-                </when>
-                <otherwise>
-                    ASC
-                </otherwise>
-            </choose>
-        </if>
-        <if test="udt_dt_fg.length() > 0">
-            , udt_dt
-            <choose>
-                <when test="udt_dt_fg == 'desc'">
-                    DESC
-                </when>
-                <otherwise>
-                    ASC
-                </otherwise>
-            </choose>
-        </if>
-        LIMIT #{start_no},#{page_size}
-    </select>
-
-
 
 </mapper>

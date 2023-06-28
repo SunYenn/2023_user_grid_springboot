@@ -6,16 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SetData {
-    public static void setUserSeq(UserData data, int seq) {
-        data.getEttUserMst().setUser_seq(seq);
-        data.getEttUserPwd().setUser_seq(seq);
-        data.getEttUserRoleGrpMap().setUser_seq(seq);
-    }
-
-    public static void setCreData(UserData data, String id, String strDate) {
-        data.getEttUserMst().setCre_id(id);
-        data.getEttUserMst().setCre_dt(strDate);
-    }
 
     public static void setPaging(Paging paging) {
 
@@ -27,5 +17,21 @@ public class SetData {
         paging.setTotal_page(total_page);
         paging.setStart_no(start_no);
         paging.setStart_page(start_page);
+    }
+
+    public static void setUserSeq(UserData data, int seq) {
+        data.getEttUserMst().setUser_seq(seq);
+        data.getEttUserPwd().setUser_seq(seq);
+        data.getEttUserRoleGrpMap().setUser_seq(seq);
+    }
+
+    public static void setCreData(UserData data, String id, String strDate) {
+        data.getEttUserMst().setCre_id(id);
+        data.getEttUserMst().setCre_dt(strDate);
+    }
+
+    public static void setUdtData(UserData data, String id, String strDate) {
+        data.getEttUserMst().setUdt_id(id);
+        data.getEttUserMst().setUdt_dt(strDate);
     }
 }

@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Preflight Request라는 실제 요청 전에 보내지는 CORS 요청에 대해 모두 접근 허용
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/api/auth/*").permitAll() // 사용자 인증 과정 부분 권한 필요 X
-                .antMatchers("/api/user/*").hasAnyRole("사용자관리자","총괄") // 사용자 관리 요청에는 '사용자관리자' 권한 필요
+                .antMatchers("/api/user/*").hasAnyRole("사용자관리자","총괄") // 사용자 관리 요청에는 '사용자관리자','총괄' 권한 필요
                 .antMatchers("/api/role/*").hasRole("권한관리자") // 관한 관리 요청에는 '권한 관리자' 권한 필요
                 .and()
                 .cors(); // CORS(Cross-Origin Resource Sharing)를 활성화

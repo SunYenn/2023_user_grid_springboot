@@ -13,10 +13,16 @@ public interface UserManageMapper {
     ArrayList<EttRoleGrp> getRoleGrpList();
 
     int getUserSeq();
+    
     // 사용자 등록
     void istUserMst(EttUserMst ettUserMst);
-
     void istUserPwd(EttUserPwd ettUserPwd);
-
     void istUserRoleGrpMap(EttUserRoleGrpMap ettUserRoleGrpMap);
+
+    // 사용자 정보 수정
+    void udtUserMst(EttUserMst ettUserMst);
+    void udtUserRoleGrpMap(EttUserRoleGrpMap ettUserRoleGrpMap);
+
+    // 사용자 정보 가져오기
+    EttUserMst getUserData(String id);
 }

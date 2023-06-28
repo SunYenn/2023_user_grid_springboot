@@ -23,4 +23,7 @@ public class EttUserMst extends CommData {
     private String emp_type_cd; // 직급 코드
     private String zone_list; // 구역 리스트?
 
+    private String role_grp_name; // 권한 그룹 이름
+
+
 }
