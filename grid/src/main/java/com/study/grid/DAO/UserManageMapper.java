@@ -10,7 +10,8 @@ public interface UserManageMapper {
     int countUserMstList(Paging paging);
     ArrayList<EttUserMst> selectUserMstList(Paging paging);
 
-    ArrayList<EttRoleGrp> getRoleGrpList();
+    // 역할 selectbox 데이터 가져오기
+    ArrayList<EttRoleGrp> getRoleGrpList(); 
 
     int getUserSeq();
     
@@ -25,4 +26,7 @@ public interface UserManageMapper {
 
     // 사용자 정보 가져오기
     EttUserMst getUserData(String id);
+
+    // 사용자 정보 삭제하기
+    void deleteUserBySeq(int seq);
 }

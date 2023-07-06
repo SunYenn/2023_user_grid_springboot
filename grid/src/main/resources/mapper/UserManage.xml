@@ -3,7 +3,7 @@
 <mapper namespace="com.study.grid.DAO.UserManageMapper" >
 
     <select id="countUserMstList" parameterType="com.study.grid.VO.Paging" resultType="int">
-        select count(*) from tb_user_mst where 1 = 1
+        select count(*) from tb_user_mst where del_yn = 'N'
         <if test='search_id.length() > 0'>
             and user_id like concat('%',#{search_id},'%')
         </if>
@@ -19,9 +19,9 @@
         select mst.*,
         role.ROLE_GRP_NAME
         from tb_user_mst mst
-        join tb_user_role_grp_map map on mst.USER_SEQ = map.USER_SEQ
-        join tb_role_grp role on map.ROLE_GRP_SEQ = role.ROLE_GRP_SEQ
-        where 1 = 1
+            join tb_user_role_grp_map map on mst.USER_SEQ = map.USER_SEQ
+            join tb_role_grp role on map.ROLE_GRP_SEQ = role.ROLE_GRP_SEQ
+        where mst.del_yn = 'N'
         <if test='search_id.length() > 0'>
             and user_id like concat('%',#{search_id},'%')
         </if>
@@ -60,7 +60,7 @@
     </select>
 
     <select id="getRoleGrpList" resultType="com.study.grid.VO.EttRoleGrp">
-        select ROLE_GRP_SEQ, ROLE_GRP_NAME from tb_role_grp
+        select ROLE_GRP_SEQ, ROLE_GRP_NAME from tb_role_grp where del_yn = 'N'
     </select>
 
     <select id="getUserSeq" resultType="int">
@@ -132,5 +132,9 @@
     <select id="getUserData" parameterType="String" resultType="com.study.grid.VO.EttUserMst">
         select * from tb_user_mst where user_id = #{id}
     </select>
+
+    <update id="deleteUserBySeq" parameterType="int">
+        update tb_user_mst set del_yn="Y" where user_seq = #{seq}
+    </update>
 
 </mapper>

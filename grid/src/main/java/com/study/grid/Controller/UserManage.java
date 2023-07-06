@@ -105,12 +105,22 @@ public class UserManage {
     }
 
     @GetMapping("/getUserData/{id}")
-    @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<?> getUserData(@PathVariable String id) throws NoSuchAlgorithmException {
 
-        log.info("id : {}", id);
         EttUserMst userMst = UMmapper.getUserData(id);
         return ResponseEntity.ok(userMst);
+    }
+
+    @PostMapping("/delete")
+    public void deleteUsef(@RequestBody ArrayList<Integer> userSeqs) {
+        for(int seq : userSeqs) {
+            UMmapper.deleteUserBySeq(seq);
+        }
+    }
+
+    @GetMapping("/excelDown")
+    public void excelDown() {
+        log.info("te");
     }
 
 }
