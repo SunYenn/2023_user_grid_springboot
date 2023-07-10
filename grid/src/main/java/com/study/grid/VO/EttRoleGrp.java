@@ -13,5 +13,20 @@ public class EttRoleGrp extends CommData {
     private String stat_cd; // 상태 코드
     private String hv_acc_role_yn; // 접근 권한 여부
 
+    public String getter(int j) {
+        switch (j) {
+            case 1 : return role_grp_name;
+            case 2 : return role_grp_desc;
+            case 3 : return stat_cd;
+            case 4 : return hv_acc_role_yn;
+            case 5 : return getDel_yn();
+            case 6 : return getCre_id();
+            case 7 : return getCre_dt();
+            case 8 : return getUdt_id();
+            case 9 : return getUdt_dt();
+        }
+        return null;
+    }
+
 }
 

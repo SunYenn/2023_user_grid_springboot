@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class TransactionConfig {
 
+    // 트랜잭션 관리
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);

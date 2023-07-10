@@ -17,6 +17,7 @@ public class Paging {
     private int start_page = 0;
 
     private String user_name_fg;
+    private String role_name_fg;
     private String cre_dt_fg;
     private String udt_dt_fg;
 
@@ -25,5 +26,6 @@ public class Paging {
     private String search_telno;
 
     private ArrayList<EttUserMst> userMsts = new ArrayList<EttUserMst>();
+    private ArrayList<EttRoleGrp> roleGrps = new ArrayList<>();
     
 }

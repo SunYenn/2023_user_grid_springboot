@@ -2,7 +2,8 @@ package com.study.grid.Controller;
 
 import com.study.grid.DAO.AuthMapper;
 import com.study.grid.DAO.UserManageMapper;
-import com.study.grid.Service.AuthUtil;
+import com.study.grid.Security.AuthUtil;
+import com.study.grid.Service.CreateExcel;
 import com.study.grid.Service.PWencryption;
 import com.study.grid.Service.SetData;
 import com.study.grid.VO.EttRoleGrp;
@@ -10,13 +11,20 @@ import com.study.grid.VO.EttUserMst;
 import com.study.grid.VO.Paging;
 import com.study.grid.VO.UserData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,12 +65,9 @@ public class UserManage {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("중복된 아이디입니다.");
         }
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = simpleDateFormat.format(date);
         int user_seq = UMmapper.getUserSeq();
 
-        SetData.setCreData(data, AuthUtil.getId(), strDate);
+        SetData.setUserCreData(data, AuthUtil.getId());
         SetData.setUserSeq(data, user_seq);
         data.getEttUserPwd().setUser_pwd(PWencryption.encrypt(data.getEttUserPwd().getUser_pwd()));
 
@@ -83,14 +88,13 @@ public class UserManage {
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<?> alter(@RequestBody UserData data) throws NoSuchAlgorithmException {
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String strDate = simpleDateFormat.format(date);
-
-        SetData.setUdtData(data, AuthUtil.getId(), strDate);
+        SetData.setUserUdtData(data, AuthUtil.getId());
         data.getEttUserRoleGrpMap().setUser_seq(data.getEttUserMst().getUser_seq());
 
         try {
+            if(data.getEttUserRoleGrpMap().getRole_grp_seq() == 0) {
+                data.getEttUserRoleGrpMap().setRole_grp_seq(UMmapper.getRoleGrpSeq(data.getEttUserMst().getRole_grp_name()));
+            }
             log.info("getEttUserMst : {}", data.getEttUserMst());
             log.info("getEttUserRoleGrpMap : {}",data.getEttUserRoleGrpMap());
             UMmapper.udtUserMst(data.getEttUserMst());
@@ -119,8 +123,33 @@ public class UserManage {
     }
 
     @GetMapping("/excelDown")
-    public void excelDown() {
-        log.info("te");
+    public ResponseEntity<?> excelDown() throws IOException {
+
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyMMdd");
+        String strDate = simpleDateFormat.format(date);
+
+        ArrayList<EttUserMst> allUser = UMmapper.selectAllUser();
+
+        Workbook wb = CreateExcel.setUserFile(allUser);
+
+        File tempFile = File.createTempFile("temp_" + strDate, ".xlsx");
+
+        try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+            wb.write(outputStream);
+        }
+
+        // Set the response headers for file download
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "user_" + strDate + ".xlsx");
+
+        // Create a FileSystemResource from the temporary file
+        FileSystemResource fileResource = new FileSystemResource(tempFile);
+
+        // Return the file as a ResponseEntity
+        return ResponseEntity.ok().headers(headers).body(fileResource);
     }
+
 
 }

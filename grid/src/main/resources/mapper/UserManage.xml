@@ -137,4 +137,17 @@
         update tb_user_mst set del_yn="Y" where user_seq = #{seq}
     </update>
 
+    <select id="selectAllUser" resultType="com.study.grid.VO.EttUserMst">
+        select mst.*,
+        role.ROLE_GRP_NAME
+        from tb_user_mst mst
+            join tb_user_role_grp_map map on mst.USER_SEQ = map.USER_SEQ
+            join tb_role_grp role on map.ROLE_GRP_SEQ = role.ROLE_GRP_SEQ
+        ORDER BY map.USER_SEQ asc
+    </select>
+
+    <select id="getRoleGrpSeq" resultType="int" parameterType="string">
+        select role_grp_seq from tb_role_grp where ROLE_GRP_NAME = #{roleGrpName}
+    </select>
+
 </mapper>

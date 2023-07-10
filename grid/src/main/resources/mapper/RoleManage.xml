@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.study.grid.DAO.RoleManageMapper" >
+
+    <select id="countRoleGrpList" parameterType="com.study.grid.VO.Paging" resultType="int">
+        select count(*) from tb_role_grp where del_yn = 'N'
+        <if test='search_name.length() > 0'>
+            and role_grp_name like concat('%',#{search_name},'%')
+        </if>
+    </select>
+
+    <select id="selectRoleGrpList" parameterType="com.study.grid.VO.Paging" resultType="com.study.grid.VO.EttRoleGrp">
+        select * from tb_role_grp where del_yn = 'N'
+        <if test='search_name.length() > 0'>
+            and role_grp_name like concat('%',#{search_name},'%')
+        </if>
+        order by 1 = 1
+        <choose>
+            <when test="role_name_fg.length() > 0">
+                , ROLE_GRP_NAME
+                <choose>
+                    <when test="role_name_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <when test="cre_dt_fg.length() > 0">
+                , cre_dt
+                <choose>
+                    <when test="cre_dt_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <when test="udt_dt_fg.length() > 0">
+                , udt_dt
+                <choose>
+                    <when test="udt_dt_fg == 'desc'">DESC</when>
+                    <otherwise>ASC</otherwise>
+                </choose>
+            </when>
+            <otherwise>, ROLE_GRP_SEQ ASC</otherwise>
+        </choose>
+        LIMIT #{start_no},#{page_size}
+    </select>
+
+    <update id="udtRoleGrp" parameterType="com.study.grid.VO.EttRoleGrp">
+        update tb_role_grp
+        set
+            udt_id = #{udt_id},
+            udt_dt = #{udt_dt},
+            role_grp_name = #{role_grp_name},
+            role_grp_desc = #{role_grp_desc},
+            stat_cd = #{stat_cd},
+            hv_acc_role_yn = #{hv_acc_role_yn}
+        where role_grp_seq = #{role_grp_seq}
+    </update>
+
+    <select id="roleCheck" parameterType="String" resultType="com.study.grid.VO.EttRoleGrp">
+        select * from tb_role_grp where role_grp_name = #{roleGrpName}
+    </select>
+
+    <select id="getRoleGrpSeq" resultType="int">
+        select IFNULL(Max(ROLE_GRP_SEQ) + 1,1) from tb_role_grp
+    </select>
+
+    <insert id="istRoleGrp" parameterType="com.study.grid.VO.EttRoleGrp">
+        insert INTO tb_role_grp (
+            CRE_ID,
+            CRE_DT,
+            ROLE_GRP_SEQ,
+            ROLE_GRP_NAME,
+            ROLE_GRP_DESC,
+            STAT_CD,
+            HV_ACC_ROLE_YN
+        ) VALUES (
+            #{cre_id},
+            #{cre_dt},
+            #{role_grp_seq},
+            #{role_grp_name},
+            #{role_grp_desc},
+            #{stat_cd},
+            #{hv_acc_role_yn}
+        )
+    </insert>
+
+    <select id="selectAllRoleGrp" parameterType="com.study.grid.VO.EttRoleGrp">
+        select *
+        from tb_role_grp
+        ORDER BY ROLE_GRP_SEQ asc
+    </select>
+    
+    <delete id="deleteRoleBySeq" parameterType="int">
+        delete from tb_role_grp where ROLE_GRP_SEQ = #{seq}
+    </delete>
+
+
+</mapper>

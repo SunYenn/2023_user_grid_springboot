@@ -25,5 +25,22 @@ public class EttUserMst extends CommData {
 
     private String role_grp_name; // 권한 그룹 이름
 
+    public String getter(int j) {
+        switch (j) {
+            case 1 : return user_id;
+            case 2 : return user_name;
+            case 3 : return user_sno;
+            case 4 : return user_email;
+            case 5 : return user_telno;
+            case 6 : return card_id;
+            case 7 : return card_exp_dt;
+            case 8 : return acct_exp_dt;
+            case 9 : return login_dt;
+            case 10 : return last_login_ip;
+            case 11 : return getDel_yn();
+        }
+        return null;
+    }
+
 
 }
