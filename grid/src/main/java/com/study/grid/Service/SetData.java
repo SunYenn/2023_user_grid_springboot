@@ -2,7 +2,7 @@ package com.study.grid.Service;
 
 import com.study.grid.Security.AuthUtil;
 import com.study.grid.VO.Paging;
-import com.study.grid.VO.UserData;
+import com.study.grid.VO.AllData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
@@ -27,28 +27,28 @@ public class SetData {
         paging.setStart_page(start_page);
     }
 
-    public static void setUserSeq(UserData data, int seq) {
+    public static void setUserSeq(AllData data, int seq) {
         data.getEttUserMst().setUser_seq(seq);
         data.getEttUserPwd().setUser_seq(seq);
         data.getEttUserRoleGrpMap().setUser_seq(seq);
     }
 
-    public static void setUserCreData(UserData data, String id) {
+    public static void setUserCreData(AllData data, String id) {
         data.getEttUserMst().setCre_id(id);
         data.getEttUserMst().setCre_dt(strDate);
     }
 
-    public static void setUserUdtData(UserData data, String id) {
+    public static void setUserUdtData(AllData data, String id) {
         data.getEttUserMst().setUdt_id(id);
         data.getEttUserMst().setUdt_dt(strDate);
     }
 
-    public static void setRoleUdtData(UserData data, String id) {
+    public static void setRoleUdtData(AllData data, String id) {
         data.getEttRoleGrp().setUdt_id(id);
         data.getEttRoleGrp().setUdt_dt(strDate);
     }
 
-    public static void setRoleCreData(UserData data, int roleGrpSeq) {
+    public static void setRoleCreData(AllData data, int roleGrpSeq) {
         data.getEttRoleGrp().setCre_id(AuthUtil.getId());
         data.getEttRoleGrp().setCre_dt(strDate);
         data.getEttRoleGrp().setRole_grp_seq(roleGrpSeq);

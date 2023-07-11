@@ -25,7 +25,7 @@ public class LoginService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UserData loginMember(EttUserMst istMst, EttUserPwd istPw) throws NoSuchAlgorithmException {
+    public AllData loginMember(EttUserMst istMst, EttUserPwd istPw) throws NoSuchAlgorithmException {
 
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -58,8 +58,8 @@ public class LoginService {
         mapper.successLogin(mst);
 
         // 회원정보를 인증클래스 객체(authentication)로 매핑
-        UserData userData = new UserData(mst, pwd, roleGrp);
-        return modelMapper.map(userData, UserData.class);
+        AllData allData = new AllData(mst, pwd, roleGrp);
+        return modelMapper.map(allData, AllData.class);
 
     }
 

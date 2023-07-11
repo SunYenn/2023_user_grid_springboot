@@ -9,7 +9,7 @@ import com.study.grid.Service.SetData;
 import com.study.grid.VO.EttRoleGrp;
 import com.study.grid.VO.EttUserMst;
 import com.study.grid.VO.Paging;
-import com.study.grid.VO.UserData;
+import com.study.grid.VO.AllData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class UserManage {
 
     @PostMapping("/register") // 사용자 등록
     @Transactional(rollbackFor = RuntimeException.class)
-    public ResponseEntity<?> register(@RequestBody UserData data) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> register(@RequestBody AllData data) throws NoSuchAlgorithmException {
 
         EttUserMst mst = authMapper.IdCheck(data.getEttUserMst().getUser_id());
         if (mst != null) {
@@ -86,7 +86,7 @@ public class UserManage {
 
     @PostMapping("/alter") // 사용자 정보 수정
     @Transactional(rollbackFor = RuntimeException.class)
-    public ResponseEntity<?> alter(@RequestBody UserData data) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> alter(@RequestBody AllData data) throws NoSuchAlgorithmException {
 
         SetData.setUserUdtData(data, AuthUtil.getId());
         data.getEttUserRoleGrpMap().setUser_seq(data.getEttUserMst().getUser_seq());

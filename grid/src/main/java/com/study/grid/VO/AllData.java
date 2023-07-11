@@ -3,7 +3,7 @@ package com.study.grid.VO;
 import lombok.Data;
 
 @Data
-public class UserData {
+public class AllData {
 
     private EttUserMst ettUserMst;
     private EttUserPwd ettUserPwd;
@@ -12,9 +12,9 @@ public class UserData {
 
     private Paging paging;
 
-    public UserData() {}
+    public AllData() {}
 
-    public UserData(EttUserMst mst, EttUserPwd pwd, EttRoleGrp roleGrp) {
+    public AllData(EttUserMst mst, EttUserPwd pwd, EttRoleGrp roleGrp) {
         this.ettUserMst = mst;
         this.ettUserPwd = pwd;
         this.ettRoleGrp = roleGrp;

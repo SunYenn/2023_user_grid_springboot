@@ -5,9 +5,8 @@ import com.study.grid.Security.AuthUtil;
 import com.study.grid.Service.CreateExcel;
 import com.study.grid.Service.SetData;
 import com.study.grid.VO.EttRoleGrp;
-import com.study.grid.VO.EttUserMst;
 import com.study.grid.VO.Paging;
-import com.study.grid.VO.UserData;
+import com.study.grid.VO.AllData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class RoleManage {
     }
 
     @PostMapping("/alter") // 그룹 정보 수정
-    public ResponseEntity<?> alter(@RequestBody UserData data){
+    public ResponseEntity<?> alter(@RequestBody AllData data){
 
         SetData.setRoleUdtData(data, AuthUtil.getId());
 
@@ -56,7 +55,7 @@ public class RoleManage {
     }
 
     @PostMapping("/register") // 그룹 등록
-    public ResponseEntity<?> register(@RequestBody UserData data) {
+    public ResponseEntity<?> register(@RequestBody AllData data) {
 
         EttRoleGrp role = RMmapper.roleCheck(data.getEttRoleGrp().getRole_grp_name());
 

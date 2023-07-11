@@ -5,7 +5,7 @@ import com.study.grid.DAO.AuthMapper;
 import com.study.grid.Security.AuthProvider;
 import com.study.grid.Service.ConvertToIPv4;
 import com.study.grid.Service.LoginService;
-import com.study.grid.VO.UserData;
+import com.study.grid.VO.AllData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +31,19 @@ public class auth {
 
 
     @PostMapping("/login") // 로그인
-    public ResponseEntity<?> login(@RequestBody UserData data, HttpServletRequest request) throws NoSuchAlgorithmException {
+    public ResponseEntity<?> login(@RequestBody AllData data, HttpServletRequest request) throws NoSuchAlgorithmException {
 
         data.getEttUserMst().setLast_login_ip(ConvertToIPv4.convert(request.getRemoteAddr()));
         log.info("ip : {}", ConvertToIPv4.convert(request.getRemoteAddr()));
-        UserData userData = loginService.loginMember(data.getEttUserMst(), data.getEttUserPwd());
+        AllData allData = loginService.loginMember(data.getEttUserMst(), data.getEttUserPwd());
 
         return ResponseEntity.ok()
             .header("accesstoken", authProvider
                     .createToken(
-                            userData.getEttUserMst().getUser_id(),
-                            userData.getEttUserMst().getUser_name(),
-                            userData.getEttRoleGrp().getRole_grp_name()))
-            .body(userData);
+                            allData.getEttUserMst().getUser_id(),
+                            allData.getEttUserMst().getUser_name(),
+                            allData.getEttRoleGrp().getRole_grp_name()))
+            .body(allData);
     }
 
 }
